@@ -91,8 +91,7 @@ function initPlayer(div: HTMLElement) {
     })
 }
 
-function on_load(e: any) {
-    const div = e.target;
+function on_mounted(div: HTMLElement) {
     let resolver = () => {};
     const promise = new Promise((resolve: (reason?: any) => void) => resolver = resolve);
     promise.then(() => initPlayer(div));
@@ -141,7 +140,7 @@ watch(() => props.src, () => {
 });
 
 onMounted(() => {
-    initPlayer(<HTMLElement>youtube.value);
+    on_mounted(<HTMLElement>youtube.value);
 })
 
 onBeforeUnmount(() => {
