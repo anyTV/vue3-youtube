@@ -71,7 +71,6 @@ function initPlayer(div: HTMLElement) {
         return;
     }
     initiated.value = true
-    console.log('initPlayer', { div });
     // @ts-ignore
     // eslint-disable-next-line no-undef
     player.value = new YT.Player(div, {

@@ -95,7 +95,7 @@ function ne({ player: e }) {
   function V() {
     e.value?.nextVideo();
   }
-  function v() {
+  function g() {
     e.value?.previousVideo();
   }
   function u(o) {
@@ -110,7 +110,7 @@ function ne({ player: e }) {
   function y() {
     return e.value ? e.value.isMuted() : !1;
   }
-  function g(o) {
+  function v(o) {
     e.value?.setVolume(o);
   }
   function d() {
@@ -176,12 +176,12 @@ function ne({ player: e }) {
     stopVideo: w,
     seekTo: P,
     nextVideo: V,
-    previousVideo: v,
+    previousVideo: g,
     playVideoAt: u,
     mute: m,
     unMute: k,
     isMuted: y,
-    setVolume: g,
+    setVolume: v,
     getVolume: d,
     getPlaybackRate: B,
     setPlaybackRate: E,
@@ -226,8 +226,8 @@ const ie = /* @__PURE__ */ O({
       width: "100%",
       height: "100%"
     });
-    function P(v) {
-      h.value || (h.value = !0, console.log("initPlayer", { div: v }), i.value = new YT.Player(v, {
+    function P(g) {
+      h.value || (h.value = !0, i.value = new YT.Player(g, {
         height: t.height,
         width: t.width,
         videoId: a.value,
@@ -248,8 +248,8 @@ const ie = /* @__PURE__ */ O({
         }
       }));
     }
-    function V(v) {
-      const u = v.target;
+    function V(g) {
+      const u = g.target;
       let m = () => {
       };
       new Promise((d) => m = d).then(() => P(u)), window.onYouTubeIframeAPIReadyResolvers || (window.onYouTubeIframeAPIReadyResolvers = []), window.onYouTubeIframeAPIReady || (window.onYouTubeIframeAPIReady = () => {
@@ -258,13 +258,13 @@ const ie = /* @__PURE__ */ O({
         });
       });
       const y = "youtube-iframe-js-api-script";
-      let g = document.getElementById(y);
-      if (g)
+      let v = document.getElementById(y);
+      if (v)
         m();
       else {
-        window.onYouTubeIframeAPIReadyResolvers?.push(m), g = document.createElement("script"), g.id = y, g.src = "https://www.youtube.com/iframe_api";
+        window.onYouTubeIframeAPIReadyResolvers?.push(m), v = document.createElement("script"), v.id = y, v.src = "https://www.youtube.com/iframe_api";
         const d = document.getElementsByTagName("script")[0];
-        d && d.parentNode && d.parentNode.insertBefore(g, d);
+        d && d.parentNode && d.parentNode.insertBefore(v, d);
       }
     }
     return I(() => t.width, () => {
@@ -275,7 +275,7 @@ const ie = /* @__PURE__ */ O({
       h.value && i.value && i.value?.loadVideoById(a.value);
     }), q(() => {
       i.value?.destroy();
-    }), f(ne({ player: i })), (v, u) => (R(), _("div", {
+    }), f(ne({ player: i })), (g, u) => (R(), _("div", {
       style: A(r.value)
     }, [
       H(oe, {
