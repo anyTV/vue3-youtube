@@ -1,13 +1,13 @@
-import { openBlock as R, createElementBlock as _, normalizeStyle as A, defineComponent as O, computed as T, ref as b, watch as I, onBeforeUnmount as q, createVNode as H } from "vue";
-var J = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
-function K(e) {
+import { openBlock as _, createElementBlock as A, normalizeStyle as S, defineComponent as q, computed as R, ref as b, watch as I, onBeforeUnmount as H, readonly as k, createVNode as J } from "vue";
+var K = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
+function W(e) {
   return e && e.__esModule && Object.prototype.hasOwnProperty.call(e, "default") ? e.default : e;
 }
-var S = { exports: {} };
+var B = { exports: {} };
 (function(e, f) {
-  (function(s, t) {
+  (function(d, t) {
     e.exports = t();
-  })(J, function(s) {
+  })(K, function(d) {
     return function(t, n) {
       if (n == null && (n = { fuzzy: !0 }), /youtu\.?be/.test(t)) {
         var a, r = [
@@ -35,25 +35,25 @@ var S = { exports: {} };
       return null;
     };
   });
-})(S);
-var W = S.exports;
-const X = /* @__PURE__ */ K(W), Z = {
+})(B);
+var X = B.exports;
+const Z = /* @__PURE__ */ W(X), ee = {
   props: ["wrapperStyle"],
   mounted() {
     this.$emit("load", { target: this.$el });
   }
-}, ee = (e, f) => {
-  const s = e.__vccOpts || e;
+}, te = (e, f) => {
+  const d = e.__vccOpts || e;
   for (const [t, n] of f)
-    s[t] = n;
-  return s;
+    d[t] = n;
+  return d;
 };
-function te(e, f, s, t, n, a) {
-  return R(), _("div", {
-    style: A(s.wrapperStyle)
+function oe(e, f, d, t, n, a) {
+  return _(), A("div", {
+    style: S(d.wrapperStyle)
   }, null, 4);
 }
-const oe = /* @__PURE__ */ ee(Z, [["render", te]]), ue = {
+const ue = /* @__PURE__ */ te(ee, [["render", oe]]), ne = {
   UNSTARTED: -1,
   ENDED: 0,
   PLAYING: 1,
@@ -61,11 +61,11 @@ const oe = /* @__PURE__ */ ee(Z, [["render", te]]), ue = {
   BUFFERING: 3,
   CUED: 5
 };
-function ne({ player: e }) {
+function ae({ player: e }) {
   function f(o, l, c) {
     e.value?.cueVideoById(o, l, c);
   }
-  function s(o, l, c) {
+  function d(o, l, c) {
     e.value?.loadVideoById(o, l, c);
   }
   function t(o, l, c) {
@@ -74,28 +74,28 @@ function ne({ player: e }) {
   function n(o, l, c) {
     e.value?.loadVideoByUrl(o, l, c);
   }
-  function a(o, l, c, p) {
-    e.value?.cuePlaylist(o, l, c, p);
+  function a(o, l, c, V) {
+    e.value?.cuePlaylist(o, l, c, V);
   }
-  function r(o, l, c, p) {
-    e.value?.loadPlaylist(o, l, c, p);
+  function r(o, l, c, V) {
+    e.value?.loadPlaylist(o, l, c, V);
   }
   function i() {
     e.value?.playVideo();
   }
-  function h() {
+  function g() {
     e.value?.pauseVideo();
   }
-  function w() {
+  function y() {
     e.value?.stopVideo();
   }
   function P(o, l) {
     e.value?.seekTo(o, l);
   }
-  function V() {
+  function p() {
     e.value?.nextVideo();
   }
-  function g() {
+  function h() {
     e.value?.previousVideo();
   }
   function u(o) {
@@ -104,104 +104,104 @@ function ne({ player: e }) {
   function m() {
     e.value?.mute();
   }
-  function k() {
+  function T() {
     e.value?.unMute();
   }
-  function y() {
+  function w() {
     return e.value ? e.value.isMuted() : !1;
   }
   function v(o) {
     e.value?.setVolume(o);
   }
-  function d() {
+  function s() {
     return e.value ? e.value.getVolume() : 0;
   }
-  function B() {
+  function E() {
     return e.value ? e.value.getPlaybackRate() : 0;
   }
-  function E(o) {
+  function x(o) {
     e.value?.setPlaybackRate(o);
   }
-  function x() {
+  function U() {
     return e.value ? e.value.getAvailablePlaybackRates() : [];
   }
-  function U(o) {
+  function Y(o) {
     e.value?.setLoop(o);
   }
-  function Y(o) {
+  function C(o) {
     e.value?.setShuffle(o);
   }
-  function C() {
+  function D() {
     return e.value ? e.value.getVideoLoadedFraction() : 0;
   }
-  function D() {
-    return e.value ? e.value.getPlayerState() : ue.UNSTARTED;
-  }
   function N() {
-    return e.value ? e.value.getCurrentTime() : 0;
+    return e.value ? e.value.getPlayerState() : ne.UNSTARTED;
   }
   function $() {
+    return e.value ? e.value.getCurrentTime() : 0;
+  }
+  function L() {
     return e.value ? e.value.getPlaybackQuality() : "default";
   }
-  function L(o) {
+  function z(o) {
     e.value?.setPlaybackQuality(o);
   }
-  function z() {
+  function Q() {
     return e.value ? e.value.getAvailableQualityLevels() : [];
   }
-  function Q() {
+  function F() {
     return e.value ? e.value.getDuration() : 0;
   }
-  function F() {
+  function M() {
     return e.value ? e.value.getVideoUrl() : "";
   }
-  function M() {
+  function j() {
     return e.value ? e.value.getVideoEmbedCode() : "";
   }
-  function j() {
+  function G() {
     return e.value ? e.value.getPlaylist() : [];
   }
-  function G() {
+  function O() {
     return e.value ? e.value.getPlaylistIndex() : 0;
   }
   return {
     cueVideoById: f,
-    loadVideoById: s,
+    loadVideoById: d,
     cueVideoByUrl: t,
     loadVideoByUrl: n,
     cuePlaylist: a,
     loadPlaylist: r,
     playVideo: i,
-    pauseVideo: h,
-    stopVideo: w,
+    pauseVideo: g,
+    stopVideo: y,
     seekTo: P,
-    nextVideo: V,
-    previousVideo: g,
+    nextVideo: p,
+    previousVideo: h,
     playVideoAt: u,
     mute: m,
-    unMute: k,
-    isMuted: y,
+    unMute: T,
+    isMuted: w,
     setVolume: v,
-    getVolume: d,
-    getPlaybackRate: B,
-    setPlaybackRate: E,
-    getAvailablePlaybackRates: x,
-    setLoop: U,
-    setShuffle: Y,
-    getVideoLoadedFraction: C,
-    getPlayerState: D,
-    getCurrentTime: N,
-    getPlaybackQuality: $,
-    setPlaybackQuality: L,
-    getAvailableQualityLevels: z,
-    getDuration: Q,
-    getVideoUrl: F,
-    getVideoEmbedCode: M,
-    getPlaylist: j,
-    getPlaylistIndex: G
+    getVolume: s,
+    getPlaybackRate: E,
+    setPlaybackRate: x,
+    getAvailablePlaybackRates: U,
+    setLoop: Y,
+    setShuffle: C,
+    getVideoLoadedFraction: D,
+    getPlayerState: N,
+    getCurrentTime: $,
+    getPlaybackQuality: L,
+    setPlaybackQuality: z,
+    getAvailableQualityLevels: Q,
+    getDuration: F,
+    getVideoUrl: M,
+    getVideoEmbedCode: j,
+    getPlaylist: G,
+    getPlaylistIndex: O
   };
 }
-const ie = /* @__PURE__ */ O({
+const le = /* @__PURE__ */ q({
   __name: "YouTube",
   props: {
     src: {},
@@ -211,14 +211,14 @@ const ie = /* @__PURE__ */ O({
     vars: {}
   },
   emits: ["ready", "state-change", "playback-quality-change", "playback-rate-change", "error", "api-change", "autoplay-blocked"],
-  setup(e, { expose: f, emit: s }) {
-    const t = e, n = s, a = T(() => X(t.src) || t.src), r = T(() => ({
+  setup(e, { expose: f, emit: d }) {
+    const t = e, n = d, a = R(() => Z(t.src) || t.src), r = R(() => ({
       width: `${t.width}px`,
       height: `${t.height}px`,
       position: "relative"
     }));
     b();
-    const i = b(), h = b(!1), w = b(!1);
+    const i = b(), g = b(!1), y = b(!1);
     b({
       position: "absolute",
       top: "0",
@@ -226,8 +226,8 @@ const ie = /* @__PURE__ */ O({
       width: "100%",
       height: "100%"
     });
-    function P(g) {
-      h.value || (h.value = !0, i.value = new YT.Player(g, {
+    function P(h) {
+      g.value || (g.value = !0, i.value = new YT.Player(h, {
         height: t.height,
         width: t.width,
         videoId: a.value,
@@ -235,7 +235,7 @@ const ie = /* @__PURE__ */ O({
         playerVars: t.vars,
         events: {
           onReady: (u) => {
-            w.value = !0, setTimeout(() => n("ready", u));
+            y.value = !0, setTimeout(() => n("ready", u));
           },
           onStateChange: (u) => n("state-change", u),
           onPlaybackQualityChange: (u) => n("playback-quality-change", u),
@@ -248,23 +248,23 @@ const ie = /* @__PURE__ */ O({
         }
       }));
     }
-    function V(g) {
-      const u = g.target;
+    function p(h) {
+      const u = h.target;
       let m = () => {
       };
-      new Promise((d) => m = d).then(() => P(u)), window.onYouTubeIframeAPIReadyResolvers || (window.onYouTubeIframeAPIReadyResolvers = []), window.onYouTubeIframeAPIReady || (window.onYouTubeIframeAPIReady = () => {
-        window.onYouTubeIframeAPIReadyResolvers?.forEach((d) => {
-          d();
+      new Promise((s) => m = s).then(() => P(u)), window.onYouTubeIframeAPIReadyResolvers || (window.onYouTubeIframeAPIReadyResolvers = []), window.onYouTubeIframeAPIReady || (window.onYouTubeIframeAPIReady = () => {
+        window.onYouTubeIframeAPIReadyResolvers?.forEach((s) => {
+          s();
         });
       });
-      const y = "youtube-iframe-js-api-script";
-      let v = document.getElementById(y);
+      const w = "youtube-iframe-js-api-script";
+      let v = document.getElementById(w);
       if (v)
         m();
       else {
-        window.onYouTubeIframeAPIReadyResolvers?.push(m), v = document.createElement("script"), v.id = y, v.src = "https://www.youtube.com/iframe_api";
-        const d = document.getElementsByTagName("script")[0];
-        d && d.parentNode && d.parentNode.insertBefore(v, d);
+        window.onYouTubeIframeAPIReadyResolvers?.push(m), v = document.createElement("script"), v.id = w, v.src = "https://www.youtube.com/iframe_api";
+        const s = document.getElementsByTagName("script")[0];
+        s && s.parentNode && s.parentNode.insertBefore(v, s);
       }
     }
     return I(() => t.width, () => {
@@ -272,19 +272,24 @@ const ie = /* @__PURE__ */ O({
     }), I(() => t.height, () => {
       i.value?.setSize(+t.width, +t.height);
     }), I(() => t.src, () => {
-      h.value && i.value && i.value?.loadVideoById(a.value);
-    }), q(() => {
+      g.value && i.value && i.value?.loadVideoById(a.value);
+    }), H(() => {
       i.value?.destroy();
-    }), f(ne({ player: i })), (g, u) => (R(), _("div", {
-      style: A(r.value)
+    }), f({
+      player: k(i),
+      initiated: k(g),
+      ready: k(y),
+      ...ae({ player: i })
+    }), (h, u) => (_(), A("div", {
+      style: S(r.value)
     }, [
-      H(oe, {
+      J(ue, {
         wrapperStyle: r.value,
-        onLoad: V
+        onLoad: p
       }, null, 8, ["wrapperStyle"])
     ], 4));
   }
 });
 export {
-  ie as default
+  le as default
 };

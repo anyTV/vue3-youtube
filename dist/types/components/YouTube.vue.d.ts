@@ -46,6 +46,74 @@ declare const _default: import("vue").DefineComponent<__VLS_WithDefaults<__VLS_T
     getVideoEmbedCode: () => string;
     getPlaylist: () => string[];
     getPlaylistIndex: () => number;
+    player: Readonly<import("vue").Ref<{
+        readonly cueVideoById: {
+            (videoId: string, startSeconds?: number | undefined, suggestedQuality?: YT.SuggestedVideoQuality | undefined): void;
+            (args: YT.VideoByIdSettings): void;
+        };
+        readonly loadVideoById: {
+            (videoId: string, startSeconds?: number | undefined, suggestedQuality?: YT.SuggestedVideoQuality | undefined): void;
+            (args: YT.VideoByIdSettings): void;
+        };
+        readonly cueVideoByUrl: {
+            (mediaContentUrl: string, startSeconds?: number | undefined, suggestedQuality?: YT.SuggestedVideoQuality | undefined): void;
+            (args: YT.VideoByMediaContentUrlSettings): void;
+        };
+        readonly loadVideoByUrl: {
+            (mediaContentUrl: string, startSeconds?: number | undefined, suggestedQuality?: YT.SuggestedVideoQuality | undefined): void;
+            (args: {
+                mediaContentUrl: string;
+                startSeconds?: number | undefined;
+                endSeconds?: number | undefined;
+                suggestedQuality?: YT.SuggestedVideoQuality | undefined;
+            }): void;
+        };
+        readonly cuePlaylist: {
+            (playlist: string | string[], index?: number | undefined, startSeconds?: number | undefined, suggestedQuality?: YT.SuggestedVideoQuality | undefined): void;
+            (args: YT.IPlaylistSettings): void;
+        };
+        readonly loadPlaylist: {
+            (playlist: string | string[], index?: number | undefined, startSeconds?: number | undefined, suggestedQuality?: YT.SuggestedVideoQuality | undefined): void;
+            (args: YT.IPlaylistSettings): void;
+        };
+        readonly playVideo: () => void;
+        readonly pauseVideo: () => void;
+        readonly stopVideo: () => void;
+        readonly seekTo: (seconds: number, allowSeekAhead: boolean) => void;
+        readonly nextVideo: () => void;
+        readonly previousVideo: () => void;
+        readonly playVideoAt: (index: number) => void;
+        readonly mute: () => void;
+        readonly unMute: () => void;
+        readonly isMuted: () => boolean;
+        readonly setVolume: (volume: number) => void;
+        readonly getVolume: () => number;
+        readonly setSize: (width: number, height: number) => void;
+        readonly getPlaybackRate: () => number;
+        readonly setPlaybackRate: (suggestedRate: number) => void;
+        readonly getAvailablePlaybackRates: () => number[];
+        readonly setLoop: (loopPlaylists: boolean) => void;
+        readonly setShuffle: (shufflePlaylist: boolean) => void;
+        readonly getVideoLoadedFraction: () => number;
+        readonly getPlayerState: () => YT.PlayerState;
+        readonly getCurrentTime: () => number;
+        readonly getPlaybackQuality: () => YT.SuggestedVideoQuality;
+        readonly setPlaybackQuality: (suggestedQuality: YT.SuggestedVideoQuality) => void;
+        readonly getAvailableQualityLevels: () => YT.SuggestedVideoQuality[];
+        readonly getDuration: () => number;
+        readonly getVideoUrl: () => string;
+        readonly getSphericalProperties: () => YT.SphericalProperties;
+        readonly setSphericalProperties: (option: YT.SphericalProperties) => void;
+        readonly getVideoEmbedCode: () => string;
+        readonly getPlaylist: () => string[];
+        readonly getPlaylistIndex: () => number;
+        readonly addEventListener: <TEvent extends YT.PlayerEvent>(eventName: keyof YT.Events, listener: (event: TEvent) => void) => void;
+        readonly removeEventListener: <TEvent_1 extends YT.PlayerEvent>(eventName: keyof YT.Events, listener: (event: TEvent_1) => void) => void;
+        readonly getIframe: () => HTMLIFrameElement;
+        readonly destroy: () => void;
+    } | undefined>>;
+    initiated: Readonly<import("vue").Ref<boolean>>;
+    ready: Readonly<import("vue").Ref<boolean>>;
 }, unknown, {}, {}, import("vue").ComponentOptionsMixin, import("vue").ComponentOptionsMixin, {
     ready: (e: any) => void;
     "state-change": (e: any) => void;

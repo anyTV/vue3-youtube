@@ -9,11 +9,12 @@
 </template>
 
 <script setup lang="ts">
-import { StyleValue, computed, getCurrentInstance, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { StyleValue, computed, getCurrentInstance, nextTick, onBeforeUnmount, onMounted, readonly, ref, watch } from 'vue';
 import getYouTubeID from 'get-youtube-id';
 import Vdiv from './Vdiv.vue';
 import { PlayerVars } from './types';
 import { useAPI } from './api';
+import { read } from 'fs';
 
 interface Window {
     onYouTubeIframeAPIReadyResolvers?: { (): void }[]
@@ -151,5 +152,10 @@ onBeforeUnmount(() => {
     player.value?.destroy();
 });
 
-defineExpose(useAPI({ player }));
+defineExpose({
+    player: readonly(player),
+    initiated: readonly(initiated),
+    ready: readonly(ready),
+    ...useAPI({ player })
+});
 </script>
