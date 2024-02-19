@@ -1,65 +1,18 @@
-# vue3-youtube
-Wrapper for [YouTube IFrame Player API](https://developers.google.com/youtube/iframe_api_reference)
+# Vue 3 + TypeScript + Vite
 
-## Installation
-```bash
-npm install vue3-youtube
-# or
-yarn add vue3-youtube
-```
+This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
-## Usage
-Browser:
-```html
-<script src="dist/vue3-youtube.umd.min.js"></script>
-```
-Global registration:
-```js
-import Vue from 'vue'
-import YouTube from 'vue3-youtube'
+## Recommended IDE Setup
 
-Vue.component('YouTube', YouTube)
-```
-or locally:
-```vue
-<template>
-    <YouTube 
-        src="https://www.youtube.com/watch?v=jNQXAC9IVRw" 
-        @ready="onReady"
-        ref="youtube" />
-</template>
+- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
-<script>
-import { defineComponent } from 'vue'
-import YouTube from 'vue3-youtube'
+## Type Support For `.vue` Imports in TS
 
-export default defineComponent({
-    components: { YouTube },
-    methods: {
-        onReady() {
-            this.$refs.youtube.playVideo()
-        },
-    },
-})
-</script>
-```
+TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
 
-### Props
-| Name   | Type           | Default | Description                                                                              |
-|--------|----------------|---------|------------------------------------------------------------------------------------------|
-| src    | String         |         | Youtube video link or ID. Required.                                                      |
-| width  | Number, String | 640     | Player width.                                                                            |
-| height | Number, String | 360     | Player height.                                                                           |
-| host   | String         |         | Points host to correct origin for CORS.                                                  |
-| vars   | Object         |         | [Player parameters](https://developers.google.com/youtube/player_parameters#Parameters). |
+If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
 
-### Events
-- ready
-- state-change
-- playback-quality-change
-- playback-rate-change
-- error
-- api-change
-
-### Methods
-[https://developers.google.com/youtube/iframe_api_reference#Functions](https://developers.google.com/youtube/iframe_api_reference#Functions)
+1. Disable the built-in TypeScript Extension
+   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
+   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
+2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
