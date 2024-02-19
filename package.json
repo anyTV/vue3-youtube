@@ -14,8 +14,7 @@
         "API",
         "iframe"
     ],
-    "module": "dist/vue3-youtube.umd.js",
-    "types": "dist/types/index.d.ts",
+    "module": "src/components/YouTube.vue",
     "scripts": {
         "dev": "vite",
         "build": "vite build && vue-tsc --emitDeclarationOnly && mv dist/src dist/types",

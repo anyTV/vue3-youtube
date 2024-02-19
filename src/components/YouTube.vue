@@ -1,20 +1,15 @@
 <template>
     <div :style="wrapperStyle">
-        <!--
-            ref="" somehow didn't work,
-            Vdiv is a work around to get the element
-        -->
-        <Vdiv :wrapperStyle="wrapperStyle" @load="on_load" />
+        <div ref="youtube" :style="wrapperStyle" />
     </div>
 </template>
 
 <script setup lang="ts">
-import { StyleValue, computed, getCurrentInstance, nextTick, onBeforeUnmount, onMounted, readonly, ref, watch } from 'vue';
-import getYouTubeID from 'get-youtube-id';
-import Vdiv from './Vdiv.vue';
+import { StyleValue, computed, onBeforeUnmount, onMounted, readonly, ref, watch } from 'vue';
+// issues occurred while trying to import 'get-youtube-id' when using Youtube.vue as a thirdparty module
+//import getYouTubeID from 'get-youtube-id';
 import { PlayerVars } from './types';
 import { useAPI } from './api';
-import { read } from 'fs';
 
 interface Window {
     onYouTubeIframeAPIReadyResolvers?: { (): void }[]
@@ -48,7 +43,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emits = defineEmits<Emits>();
 
-const id = computed(() => getYouTubeID(props.src) || props.src);
+const id = computed(() => /*getYouTubeID(props.src) ||*/ props.src);
 const wrapperStyle = computed<StyleValue>(() => ({
     width: `${props.width}px`,
     height: `${props.height}px`,
@@ -68,9 +63,6 @@ const iframeStyle = ref({
 });
 
 function initPlayer(div: HTMLElement) {
-    if (initiated.value) {
-        return;
-    }
     initiated.value = true
     // @ts-ignore
     // eslint-disable-next-line no-undef
@@ -147,6 +139,10 @@ watch(() => props.src, () => {
         player.value?.loadVideoById(id.value)
     }
 });
+
+onMounted(() => {
+    initPlayer(<HTMLElement>youtube.value);
+})
 
 onBeforeUnmount(() => {
     player.value?.destroy();
