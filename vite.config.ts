@@ -14,6 +14,10 @@ export default defineConfig({
         },
     },
 
+    ssr: {
+        noExternal: [/\.vue$/],
+    },
+
     build: {
         cssCodeSplit: true,
         target: "esnext",
