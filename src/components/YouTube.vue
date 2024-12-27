@@ -17,7 +17,7 @@ interface Window {
 }
 
 interface Props {
-    src: string
+    src?: string
     height?: number | string
     width?: number | string 
     host?: string
@@ -43,7 +43,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emits = defineEmits<Emits>();
 
-const id = computed(() => /*getYouTubeID(props.src) ||*/ props.src);
 const wrapperStyle = computed<StyleValue>(() => ({
     width: `${props.width}px`,
     height: `${props.height}px`,
@@ -69,7 +68,7 @@ function initPlayer(div: HTMLElement) {
     player.value = new YT.Player(div, {
         height: props.height,
         width: props.width,
-        videoId: id.value,
+        videoId: props.src,
         host: props.host,
         playerVars: props.vars,
         events: {
@@ -134,8 +133,11 @@ watch(() => props.height, () => {
 });
 
 watch(() => props.src, () => {
-    if (initiated.value && player.value) {
-        player.value?.loadVideoById(id.value)
+    if (initiated.value
+        && Boolean(player.value)
+        && Boolean(props.src)
+    ) {
+        player.value?.loadVideoById(props.src, props.vars?.start ?? 0);
     }
 });
 
