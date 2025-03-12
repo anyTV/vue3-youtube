@@ -62,7 +62,7 @@ const iframeStyle = ref({
 });
 
 function initPlayer(div: HTMLElement) {
-    if (!YT) {
+    if (!window.YT) {
         emits('error', new ErrorEvent('YouTube API does not exist'));
         return;
     }
