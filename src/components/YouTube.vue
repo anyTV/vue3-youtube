@@ -31,9 +31,9 @@ interface Emits {
     (event: 'playback-quality-change', e: any): void
     (event: 'playback-rate-change', e: any): void
     (event: 'error', e: any): void
+    (event: 'api-error', e: any): void
     (event: 'api-change', e: any): void
-    (event: 'api-change', e: any): void
-    (event: 'api-initialized'): void
+    (event: 'api-load'): void
     (event: 'autoplay-blocked', e: any): void
 }
 
@@ -59,11 +59,11 @@ const ready = ref(false);
 
 function initPlayer(div: HTMLElement) {
     if (!window.YT) {
-        emits('error', new ErrorEvent('YouTube API does not exist'));
+        emits('api-error', new ErrorEvent('YouTube API does not exist'));
         return;
     }
     else {
-        emits('api-initialized');
+        emits('api-load');
     }
 
     if (props.strictSrc && !props.src) {
@@ -123,7 +123,7 @@ function on_mounted(div: HTMLElement) {
         tag = document.createElement('script')
         tag.id = id
         tag.src = 'https://www.youtube.com/iframe_api'
-        tag.onerror = (e) => emits('error', e);
+        tag.onerror = (e) => emits('api-error', e);
         const firstScriptTag = document.getElementsByTagName('script')[0]
         if (firstScriptTag && firstScriptTag.parentNode) {
             firstScriptTag.parentNode.insertBefore(tag, firstScriptTag)
