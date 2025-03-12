@@ -53,13 +53,6 @@ const youtube = ref<HTMLElement>();
 const player = ref<YT.Player>();
 const initiated = ref(false);
 const ready = ref(false);
-const iframeStyle = ref({
-    position: 'absolute',
-    top: '0',
-    left: '0',
-    width: '100%',
-    height: '100%',
-});
 
 function initPlayer(div: HTMLElement) {
     if (!window.YT) {
