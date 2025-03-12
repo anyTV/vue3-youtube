@@ -114,6 +114,7 @@ function on_mounted(div: HTMLElement) {
         tag = document.createElement('script')
         tag.id = id
         tag.src = 'https://www.youtube.com/iframe_api'
+        tag.onerror = (e) => emits('error', e);
         const firstScriptTag = document.getElementsByTagName('script')[0]
         if (firstScriptTag && firstScriptTag.parentNode) {
             firstScriptTag.parentNode.insertBefore(tag, firstScriptTag)
