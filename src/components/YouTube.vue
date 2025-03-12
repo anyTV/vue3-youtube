@@ -62,6 +62,11 @@ const iframeStyle = ref({
 });
 
 function initPlayer(div: HTMLElement) {
+    if (!YT) {
+        emits('error', new ErrorEvent('YouTube API does not exist'));
+        return;
+    }
+
     initiated.value = true
     // @ts-ignore
     // eslint-disable-next-line no-undef
