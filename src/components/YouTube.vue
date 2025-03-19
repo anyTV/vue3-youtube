@@ -19,9 +19,10 @@ interface Window {
 interface Props {
     src?: string
     height?: number | string
-    width?: number | string 
+    width?: number | string
     host?: string
     vars?: PlayerVars,
+    strictSrc?: boolean
 }
 
 interface Emits {
@@ -30,8 +31,9 @@ interface Emits {
     (event: 'playback-quality-change', e: any): void
     (event: 'playback-rate-change', e: any): void
     (event: 'error', e: any): void
+    (event: 'api-error', e: any): void
     (event: 'api-change', e: any): void
-    (event: 'api-change', e: any): void
+    (event: 'api-load'): void
     (event: 'autoplay-blocked', e: any): void
 }
 
@@ -39,6 +41,7 @@ const props = withDefaults(defineProps<Props>(), {
     height: 360,
     width: 640,
     host: 'https://www.youtube.com',
+    strictSrc: false
 });
 
 const emits = defineEmits<Emits>();
@@ -53,15 +56,21 @@ const youtube = ref<HTMLElement>();
 const player = ref<YT.Player>();
 const initiated = ref(false);
 const ready = ref(false);
-const iframeStyle = ref({
-    position: 'absolute',
-    top: '0',
-    left: '0',
-    width: '100%',
-    height: '100%',
-});
 
 function initPlayer(div: HTMLElement) {
+    if (!window.YT) {
+        emits('api-error', new ErrorEvent('YouTube API does not exist'));
+        return;
+    }
+    else {
+        emits('api-load');
+    }
+
+    if (props.strictSrc && !props.src) {
+        // do not initialize player if src is empty and strict-src is set to true
+        return;
+    }
+
     initiated.value = true
     // @ts-ignore
     // eslint-disable-next-line no-undef
@@ -81,7 +90,7 @@ function initPlayer(div: HTMLElement) {
             onPlaybackRateChange: (e: any) => emits('playback-rate-change', e),
             onError: (e: any) => emits('error', e),
             onApiChange: (e: any) => emits('api-change', e),
-            onAutoplayBlocked: (e: any) => { 
+            onAutoplayBlocked: (e: any) => {
                 // NOTE: avoid calling mute() inside of onReady()
                 //       calling mute() inside of onReady() causes onAutoplayBlocked to not trigger, somehow
                 emits('autoplay-blocked', e);
@@ -114,6 +123,7 @@ function on_mounted(div: HTMLElement) {
         tag = document.createElement('script')
         tag.id = id
         tag.src = 'https://www.youtube.com/iframe_api'
+        tag.onerror = (e) => emits('api-error', e);
         const firstScriptTag = document.getElementsByTagName('script')[0]
         if (firstScriptTag && firstScriptTag.parentNode) {
             firstScriptTag.parentNode.insertBefore(tag, firstScriptTag)
