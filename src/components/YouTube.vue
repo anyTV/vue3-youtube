@@ -143,9 +143,13 @@ watch(() => props.height, () => {
 });
 
 watch(() => props.src, () => {
+    if (!initiated.value) {
+        initPlayer(<HTMLElement>youtube.value);
+    }
+
     if (initiated.value
         && Boolean(player.value)
-        && Boolean(props.src)
+        && props.src
     ) {
         player.value?.loadVideoById(props.src, props.vars?.start ?? 0);
     }
