@@ -13,7 +13,8 @@ import {
     readonly,
     ref,
     watch,
-    onBeforeMount
+    onBeforeMount,
+    Ref
 } from 'vue';
 // issues occurred while trying to import 'get-youtube-id' when using Youtube.vue as a thirdparty module
 //import getYouTubeID from 'get-youtube-id';
@@ -37,7 +38,7 @@ declare global {
         yt_embedsEnableIframeApiSendFullEmbedUrl?: boolean
         yt_embedsEnableAutoplayAndVisibilitySignals?: boolean
 
-        hbGlobalResolvers?: PromiseWithResolvers<boolean>
+        hbYtEmbedResolver?: PromiseWithResolvers<boolean>
 
         hbComponentLoading?: boolean
     }
@@ -76,10 +77,15 @@ const wrapperStyle = computed<StyleValue>(() => ({
     position: 'relative',
 }));
 
-function usePlayer() {
-    const youtubeDiv = ref<HTMLElement>();
+const youtube = ref<HTMLElement>();
+
+if (!window.hbYtEmbedResolver) {
+    window.hbYtEmbedResolver = Promise.withResolvers();
+}
+
+function usePlayer(elementRef: Ref<HTMLElement | undefined>) {
+    const youtubeDiv = elementRef;
     const youtubePlayer = ref<YT.Player>();
-    const youtubeIframeAPIReady = ref(false);
 
     const initiated = ref(false);
     const ready = ref(false);
@@ -93,13 +99,13 @@ function usePlayer() {
         }
     }
 
-    const { promise, resolve, reject } = Promise.withResolvers();
-
-    window.hbGlobalResolvers = Promise.withResolvers();
-
     async function createPlayer() {
         try {
-            await promise;
+            await window.hbYtEmbedResolver!.promise;
+
+            if (!props.src || youtubePlayer.value) {
+                return;
+            }
 
             const playerConfig = {
                 height: props.height,
@@ -127,13 +133,12 @@ function usePlayer() {
 
             youtubePlayer.value = new YT.Player(youtubeDiv.value!, playerConfig);
         } catch (error) {
-
             emits('api-error', error);
         }
 
     }
 
-    function updateSize(w: number, h: number) {
+    function updateSize(w: number | string, h: number | string) {
         if (youtubePlayer.value) {
             youtubePlayer.value.setSize(w, h);
         }
@@ -148,8 +153,7 @@ function usePlayer() {
     function attachReadyEvent() {
         if (!window.onYouTubeIframeAPIReady) {
             window.onYouTubeIframeAPIReady = () => {
-                resolve(true);
-                window.hbGlobalResolvers?.resolve(true);
+                window.hbYtEmbedResolver?.resolve(true);
             };
         }
     }
@@ -196,9 +200,7 @@ function usePlayer() {
 
             if (window.hbYoutubeIframeAttempts < 1) {
                 console.error('failed to download iframe');
-
-                reject(new Error('YouTube Iframe API was not loaded'));
-                window.hbGlobalResolvers?.reject();
+                window.hbYtEmbedResolver?.reject(new Error('YouTube Iframe API was not loaded'));
             }
         };
 
@@ -208,7 +210,7 @@ function usePlayer() {
     async function attachScript() {
         if (window.hbComponentLoading) {
             try {
-                await window.hbGlobalResolvers?.promise;
+                await window.hbYtEmbedResolver?.promise;
             }
             catch (error) {
                 // nothing done here
@@ -228,7 +230,7 @@ function usePlayer() {
         ].filter(Boolean).length >= 4;
 
         if (widgetScript && propertyCheckList) {
-            return resolve(true);
+            return;
         }
 
         let tag = createScriptTag();
@@ -258,13 +260,20 @@ function usePlayer() {
     };
 }
 
-const Player = usePlayer();
+const Player = usePlayer(youtube);
 
 watch(
     [() => props.width, () => props.height, () => props.src],
-    ([newWidth, newHeight, newSrc]) => {
-    Player.updateSize(+newWidth, +newHeight);
-    Player.load(newSrc, props.vars?.start ?? 0)
+    async ([newWidth, newHeight, newSrc]) => {
+    Player.updateSize(newWidth, newHeight);
+
+    if (!Player.player.value) {
+        await Player.createPlayer();
+    }
+
+    if (Player.ready.value) {
+        Player.load(newSrc, props.vars?.start ?? 0)
+    }
 });
 
 
