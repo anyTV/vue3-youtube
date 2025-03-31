@@ -148,6 +148,7 @@ watch(() => props.src, () => {
     }
 
     if (initiated.value
+        && ready.value
         && Boolean(player.value)
         && props.src
     ) {
