@@ -38,8 +38,6 @@ declare global {
 
         yt_embedsEnableIframeApiSendFullEmbedUrl?: boolean
         yt_embedsEnableAutoplayAndVisibilitySignals?: boolean
-
-        hbComponentLoading?: boolean
     }
 }
 
