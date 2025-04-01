@@ -21,8 +21,6 @@ import {
 import { PlayerVars } from './types';
 import { useAPI } from './api';
 
-const DEFAULT_API_DOWNLOAD_ATTEMPTS = 3;
-
 declare global {
     interface Window {
         onYouTubeIframeAPIReady?: { (): void }
@@ -47,10 +45,12 @@ const props = withDefaults(defineProps<{
     width?: number | string
     host?: string
     vars?: PlayerVars,
+    apiDownloadAttempts?: number,
 }>(), {
     height: 360,
     width: 640,
     host: 'https://www.youtube.com',
+    apiDownloadAttempts: 3,
 });
 
 const emits = defineEmits<{
@@ -187,7 +187,7 @@ function usePlayer(elementRef: Ref<HTMLElement | undefined>) {
         tag.onerror = (e) => {
 
             window.hbYoutubeIframeAttempts = Math
-                .max(0, (window.hbYoutubeIframeAttempts ?? DEFAULT_API_DOWNLOAD_ATTEMPTS) - 1);
+                .max(0, (window.hbYoutubeIframeAttempts ?? props.apiDownloadAttempts) - 1);
 
             if (window.hbYoutubeIframeAttempts < 1) {
                 console.error('failed to download iframe');
