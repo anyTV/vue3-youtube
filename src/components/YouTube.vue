@@ -21,9 +21,10 @@ import {
 import { PlayerVars } from './types';
 import { useAPI } from './api';
 
+const DEFAULT_API_DOWNLOAD_ATTEMPTS = 3;
+
 declare global {
     interface Window {
-        onYouTubeIframeAPIReadyResolvers?: { (): void }[]
         onYouTubeIframeAPIReady?: { (): void }
 
         hbYoutubeIframeAttempts?: number
@@ -37,8 +38,6 @@ declare global {
 
         yt_embedsEnableIframeApiSendFullEmbedUrl?: boolean
         yt_embedsEnableAutoplayAndVisibilitySignals?: boolean
-
-        hbYtEmbedResolver?: PromiseWithResolvers<boolean>
 
         hbComponentLoading?: boolean
     }
@@ -68,7 +67,7 @@ const emits = defineEmits<{
 
     (event: 'api-change', e: any): void
 
-    (event: 'api-load'): void
+    (event: 'api-loaded'): void
 }>();
 
 const wrapperStyle = computed<StyleValue>(() => ({
@@ -79,16 +78,13 @@ const wrapperStyle = computed<StyleValue>(() => ({
 
 const youtube = ref<HTMLElement>();
 
-if (!window.hbYtEmbedResolver) {
-    window.hbYtEmbedResolver = Promise.withResolvers();
-}
-
 function usePlayer(elementRef: Ref<HTMLElement | undefined>) {
     const youtubeDiv = elementRef;
     const youtubePlayer = ref<YT.Player>();
 
     const initiated = ref(false);
     const ready = ref(false);
+    const loaded = ref(false);
 
     const youtubeIframeScriptId = 'youtube-iframe-js-api-script';
     const youtubeWidgetScriptId = 'www-widgetapi-script';
@@ -101,9 +97,7 @@ function usePlayer(elementRef: Ref<HTMLElement | undefined>) {
 
     async function createPlayer() {
         try {
-            await window.hbYtEmbedResolver!.promise;
-
-            if (!props.src || youtubePlayer.value) {
+            if (!props.src || youtubePlayer.value || !loaded.value) {
                 return;
             }
 
@@ -153,7 +147,8 @@ function usePlayer(elementRef: Ref<HTMLElement | undefined>) {
     function attachReadyEvent() {
         if (!window.onYouTubeIframeAPIReady) {
             window.onYouTubeIframeAPIReady = () => {
-                window.hbYtEmbedResolver?.resolve(true);
+                loaded.value = true;
+                emits('api-loaded');
             };
         }
     }
@@ -194,13 +189,14 @@ function usePlayer(elementRef: Ref<HTMLElement | undefined>) {
         tag.onerror = (e) => {
 
             window.hbYoutubeIframeAttempts = Math
-                .max(0, (window.hbYoutubeIframeAttempts ?? 3) - 1);
-
-            redownload(tag);
+                .max(0, (window.hbYoutubeIframeAttempts ?? DEFAULT_API_DOWNLOAD_ATTEMPTS) - 1);
 
             if (window.hbYoutubeIframeAttempts < 1) {
                 console.error('failed to download iframe');
-                window.hbYtEmbedResolver?.reject(new Error('YouTube Iframe API was not loaded'));
+                emits('api-error', new Error('YouTube Iframe API was not loaded'));
+            }
+            else {
+                redownload(tag);
             }
         };
 
@@ -208,18 +204,6 @@ function usePlayer(elementRef: Ref<HTMLElement | undefined>) {
     }
 
     async function attachScript() {
-        if (window.hbComponentLoading) {
-            try {
-                await window.hbYtEmbedResolver?.promise;
-            }
-            catch (error) {
-                // nothing done here
-                return;
-            }
-        }
-
-        window.hbComponentLoading = true;
-
         let widgetScript = document.getElementById(youtubeWidgetScriptId) as HTMLScriptElement
 
         const propertyCheckList = [
@@ -230,6 +214,8 @@ function usePlayer(elementRef: Ref<HTMLElement | undefined>) {
         ].filter(Boolean).length >= 4;
 
         if (widgetScript && propertyCheckList) {
+            loaded.value = true;
+            emits('api-loaded');
             return;
         }
 
@@ -245,6 +231,7 @@ function usePlayer(elementRef: Ref<HTMLElement | undefined>) {
 
         initiated,
         ready,
+        loaded,
         youtubeIframeScriptId,
 
         // Functions
@@ -279,6 +266,7 @@ watch(
 
 onBeforeMount(async () => {
     Player.attachReadyEvent();
+    // TODO: Dev-5316 Heartbeat > Youtube player > Split into 2 packages
     await Player.attachScript();
 });
 
