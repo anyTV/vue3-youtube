@@ -132,8 +132,8 @@ function usePlayer(elementRef: Ref<HTMLElement | undefined>) {
             };
 
             youtubePlayer.value = new YT.Player(youtubeDiv.value!, playerConfig);
-        } catch (error) {
-            emits('api-error', error);
+        } catch {
+            // do nothing
         }
 
     }
@@ -169,6 +169,7 @@ function usePlayer(elementRef: Ref<HTMLElement | undefined>) {
 
     function redownload(tag: HTMLScriptElement) {
         tag.remove();
+        window.hbComponentLoading = false;
 
         // Companion script for iframe_api
         document.getElementById('www-widgetapi-script')?.remove();
@@ -192,15 +193,15 @@ function usePlayer(elementRef: Ref<HTMLElement | undefined>) {
         tag.src = 'https://www.youtube.com/iframe_api'
 
         tag.onerror = (e) => {
-
             window.hbYoutubeIframeAttempts = Math
                 .max(0, (window.hbYoutubeIframeAttempts ?? 3) - 1);
 
-            redownload(tag);
-
             if (window.hbYoutubeIframeAttempts < 1) {
-                console.error('failed to download iframe');
-                window.hbYtEmbedResolver?.reject(new Error('YouTube Iframe API was not loaded'));
+                window.hbYtEmbedResolver?.reject();
+                emits('api-error', new Error('YouTube Iframe API was not loaded'));
+            }
+            else {
+                redownload(tag);
             }
         };
 
@@ -209,13 +210,7 @@ function usePlayer(elementRef: Ref<HTMLElement | undefined>) {
 
     async function attachScript() {
         if (window.hbComponentLoading) {
-            try {
-                await window.hbYtEmbedResolver?.promise;
-            }
-            catch (error) {
-                // nothing done here
-                return;
-            }
+            return;
         }
 
         window.hbComponentLoading = true;
