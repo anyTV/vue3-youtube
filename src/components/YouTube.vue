@@ -33,9 +33,6 @@ declare global {
         }
 
         YTConfig?: {}
-
-        yt_embedsEnableIframeApiSendFullEmbedUrl?: boolean
-        yt_embedsEnableAutoplayAndVisibilitySignals?: boolean
     }
 }
 
@@ -166,10 +163,7 @@ function usePlayer(elementRef: Ref<HTMLElement | undefined>) {
         // Companion script for iframe_api
         document.getElementById('www-widgetapi-script')?.remove();
 
-        delete window.yt_embedsEnableIframeApiSendFullEmbedUrl;
-        delete window.yt_embedsEnableAutoplayAndVisibilitySignals;
         delete window.YTConfig;
-
         // @ts-expect-error This should be cleared to be able to reload iframe
         delete window['YT'];
 
@@ -205,11 +199,9 @@ function usePlayer(elementRef: Ref<HTMLElement | undefined>) {
         let widgetScript = document.getElementById(youtubeWidgetScriptId) as HTMLScriptElement
 
         const propertyCheckList = [
-            window['yt_embedsEnableIframeApiSendFullEmbedUrl'],
-            window['yt_embedsEnableAutoplayAndVisibilitySignals'],
             window['YT']?.loaded,
             window['YTConfig'],
-        ].filter(Boolean).length >= 4;
+        ].filter(Boolean).length >= 2;
 
         if (widgetScript && propertyCheckList) {
             loaded.value = true;
